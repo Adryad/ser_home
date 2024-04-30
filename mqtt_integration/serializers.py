@@ -11,3 +11,4 @@ class NumericalDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = NumericalData
         fields = '__all__'
+
