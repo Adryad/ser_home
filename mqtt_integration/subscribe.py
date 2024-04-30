@@ -5,8 +5,8 @@ port = 8883
 client_id = "ESP8266Client-"
 username = "ESP32"
 password = "123456aA"
-humidity_topic = "sensor/DHT11/humidity"
-temperature_celsius_topic = "sensor/DHT11/temperature_celsius"
+humidity_topic = "humidity"
+temperature_celsius_topic = "temperature_celsius"
 
 def connect_mqtt(on_message_callback):
     def on_connect(client, userdata, flags, rc):
