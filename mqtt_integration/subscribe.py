@@ -2,7 +2,7 @@ from paho.mqtt import client as mqtt_client
 import ssl
 Brocker = "a3aea2a70f7b43d1809561231ab50b37.s1.eu.hivemq.cloud"
 port = 8883
-client_id = "ESP8266Client-"
+client_id = "ESP8266Client_1"
 username = "ESP32"
 password = "123456aA"
 humidity_topic = "humidity"
