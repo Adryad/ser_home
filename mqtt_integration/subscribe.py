@@ -7,6 +7,7 @@ username = "ESP32"
 password = "123456aA"
 humidity_topic = "humidity"
 temperature_celsius_topic = "temperature_celsius"
+Gas_topic = "Gas_level"
 
 def connect_mqtt(on_message_callback):
     def on_connect(client, userdata, flags, rc):
@@ -14,6 +15,7 @@ def connect_mqtt(on_message_callback):
             print("Connected to the Broker")
             client.subscribe(temperature_celsius_topic)
             client.subscribe(humidity_topic)
+            client.subscribe(Gas_topic)
         else:
             print(f"Failed to connect with code {rc}")
 

@@ -25,14 +25,15 @@ SECRET_KEY = 'django-insecure-h*60mz0uu$l%w=k(pt0g%dlcwb00v@lgfckjgf0!g1t-%04!=s
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['yourdomain.com', 'www.yourdomain.com', 'ser-home-2.onrender.com']
+ALLOWED_HOSTS = ['yourdomain.com', 'www.yourdomain.com', 'ser-home-2.onrender.com', '127.0.0.1']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'mqtt_integration.apps.MqttIntegrationConfig',
     'rest_framework',
-    'mqtt_integration',
+    #'mqtt_integration',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
