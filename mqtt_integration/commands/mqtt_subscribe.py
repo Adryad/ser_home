@@ -1,22 +1,9 @@
+# mqtt_integration/management/commands/mqtt_subscribe.py
 from django.core.management.base import BaseCommand
-import paho.mqtt.client as mqtt
+from mqtt_integration.subscribe import main as subscribe_main
 
 class Command(BaseCommand):
-    help = 'Subscribe to an MQTT topic'
+    help = 'Subscribe to MQTT messages'
 
     def handle(self, *args, **options):
-        client = mqtt.Client()
-
-        def on_connect(client, userdata, flags, rc):
-            print("Connected with result code " + str(rc))
-            client.subscribe("your/topic")
-
-        def on_message(client, userdata, msg):
-            print(msg.topic + " " + str(msg.payload))
-
-        client.on_connect = on_connect
-        client.on_message = on_message
-
-        client.connect("mqtt.eclipse.org", 1883, 60)
-
-        client.loop_forever()
+        subscribe_main()
