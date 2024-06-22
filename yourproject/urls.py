@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from .views import FaceDataListCreate, NumericalDataListCreate, MQTTAction
+from .views import FaceDataListCreate, NumericalDataListCreate, MQTTAction, PublishAPIView
 from django.views.generic import RedirectView
 
 urlpatterns = [
@@ -28,7 +28,8 @@ urlpatterns = [
     path('facedata/', FaceDataListCreate.as_view(), name='facedata-list-create'),
     path('numericaldata/', NumericalDataListCreate.as_view(), name='numericaldata-list-create'),
     path('mqtt/', MQTTAction.as_view(), name='mqtt-action'),
-    path('', RedirectView.as_view(url='facedata/', permanent=False)),
+    path('publish/', PublishAPIView.as_view(), name='publish-api'),
+    #path('', RedirectView.as_view(url='facedata/', permanent=False)),
     path('', RedirectView.as_view(url='numericaldata/', permanent=False)),
     
 ]
