@@ -8,7 +8,9 @@ from mqtt_integration.serializers import FaceDataSerializer, NumericalDataSerial
 import subprocess
 import time
 from mqtt_integration.publish import publish_message
+import logging
 
+logger = logging.getLogger(__name__)
 class NumericalDataListCreate(generics.ListCreateAPIView):
     queryset = NumericalData.objects.all()
     serializer_class = NumericalDataSerializer
@@ -52,6 +54,7 @@ class MQTTAction(generics.CreateAPIView):
 
 class PublishAPIView(APIView):
     def post(self, request, *args, **kwargs):
+        logger.debug("Received data: %s", request.data) 
         topic = request.data.get('topic')
         status_message = request.data.get('status')
         if not topic or not status_message:
