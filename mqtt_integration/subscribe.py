@@ -6,8 +6,7 @@ import os
 import django
 import time
 from datetime import datetime
-from django.core.cache import cache
-from mqtt_integration.models import NumericalData
+
 # Set up Django environment
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'yourproject.settings')
 django.setup()
@@ -25,7 +24,7 @@ Rain_Status = "Rain_ST"
 # API endpoint to post data
 api_url = "http://127.0.0.1:8000/numericaldata/"
 
-payload = {
+data_payload = {
     'user_id': 'test_user',  # Replace with actual user ID
     'temperature': None,
     'humidity': None,
@@ -57,30 +56,25 @@ def connect_mqtt(on_message_callback):
     return client
 
 def on_message(client, userdata, msg):
+    global data_payload
     print(f"Received '{msg.payload.decode()}' from '{msg.topic}' topic")
-    if msg.topic == humidity_topic:
-        cache.set('humidity', msg.payload.decode(), timeout=None)
-    elif msg.topic == temperature_celsius_topic:
-        cache.set('temperature_celsius', msg.payload.decode(), timeout=None)
+    
+    if msg.topic == temperature_celsius_topic:
+        data_payload['temperature'] = float(msg.payload.decode())
+    elif msg.topic == humidity_topic:
+        data_payload['humidity'] = float(msg.payload.decode())
     elif msg.topic == Gas_topic:
-        cache.set('Gas_level', msg.payload.decode(), timeout=None)
+        data_payload['gas_level'] = float(msg.payload.decode())
     elif msg.topic == Rain_Status:
-        cache.set('Rain_ST', msg.payload.decode(), timeout=None)
-
-    # Post data to API
-    payload = {
-        'user_id': 'some_user_id',
-        'temperature': cache.get('temperature_celsius'),
-        'humidity': cache.get('humidity'),
-        'gas_level': cache.get('Gas_level'),
-        'rain': cache.get('Rain_ST')
-    }
-    try:
-        response = requests.post('https://ser-home-2.onrender.com/numericaldata/', json=payload)
-        if response.status_code != 201:
-            print(f"Failed to post data: {response.status_code} - {response.content.decode()}")
-    except Exception as e:
-        print(f"Error posting data: {str(e)}")
+        data_payload['rain'] = bool(int(msg.payload.decode()))
+    
+    # Post data to the NumericalDataListCreate API if all fields are filled
+    if all(value is not None for value in data_payload.values()):
+        response = requests.post(api_url, json=data_payload)
+        if response.status_code == 201:
+            print("Data posted successfully")
+        else:
+            print(f"Failed to post data: {response.status_code} - {response.text}")
 
 def main():
     client = connect_mqtt(on_message)
