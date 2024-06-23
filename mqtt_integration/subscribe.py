@@ -37,6 +37,14 @@ data_payload = {
     'timestamp': datetime.now().isoformat(),
 }
 
+# Last received values
+last_values = {
+    'temperature': None,
+    'humidity': None,
+    'gas_level': None,
+    'rain': None
+}
+
 def connect_mqtt(on_message_callback):
     def on_connect(client, userdata, flags, rc):
         if rc == 0:
@@ -58,26 +66,30 @@ def connect_mqtt(on_message_callback):
     return client
 
 def on_message(client, userdata, msg):
-    global data_payload
+    global data_payload, last_values
     logger.info(f"Received '{msg.payload.decode()}' from '{msg.topic}' topic")
     
     try:
+        value = msg.payload.decode()
         if msg.topic == "temperature_celsius":
-            data_payload['temperature'] = float(msg.payload.decode())
+            data_payload['temperature'] = float(value)
         elif msg.topic == "humidity":
-            data_payload['humidity'] = float(msg.payload.decode())
+            data_payload['humidity'] = float(value)
         elif msg.topic == "Gas_level":
-            data_payload['gas_level'] = float(msg.payload.decode())
+            data_payload['gas_level'] = float(value)
         elif msg.topic == "Rain_ST":
-            data_payload['rain'] = bool(int(msg.payload.decode()))
-        
-        # Post data to the NumericalDataListCreate API if all fields are filled
-        if all(value is not None for value in data_payload.values()):
-            response = requests.post(api_url, json=data_payload)
-            if response.status_code == 201:
-                logger.info("Data posted successfully")
-            else:
-                logger.error(f"Failed to post data: {response.status_code} - {response.text}")
+            data_payload['rain'] = bool(int(value))
+
+        if last_values[msg.topic.split('_')[0]] != value:
+            last_values[msg.topic.split('_')[0]] = value
+            if all(v is not None for v in data_payload.values()):
+                response = requests.post(api_url, json=data_payload)
+                if response.status_code == 201:
+                    logger.info("Data posted successfully")
+                else:
+                    logger.error(f"Failed to post data: {response.status_code} - {response.text}")
+        else:
+            logger.info(f"Duplicate data '{value}' for topic '{msg.topic}' not posted")
 
     except ValueError as e:
         logger.error(f"Error processing message: {e}")
