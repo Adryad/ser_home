@@ -1,4 +1,5 @@
-# publish.py
+
+    # publish.py
 from paho.mqtt import client as mqtt_client
 import ssl
 
@@ -48,37 +49,3 @@ def publish_message(topic, status):
         print(f"Failed to send message to topic {topic}")
 
     client.loop_stop()
-
-if __name__ == '__main__':
-    # This block is kept for manual testing, it won't be used when called via API
-    client = connect_mqtt()
-    client.connect(Broker, port)
-    client.loop_start()  # Start the message loop in the background
-
-    status = input("Enter Main Room Light status (on/off): ")
-    publish_message(client, Main_Room_Light_topic, status)
-
-    status = input("Enter Personal Room status (on/off): ")
-    publish_message(client, Personal_Room_topic, status)
-
-    status = input("Enter Garage status (on/off): ")
-    publish_message(client, Garage_topic, status)
-
-    status = input("Enter Outside status (on/off): ")
-    publish_message(client, Outside_topic, status)
-
-    status = input("Enter Window Control status (open/close): ")
-    publish_message(client, window_control_topic, status)
-
-    status = input("Enter garage Control status (open/close): ")
-    publish_message(client, Garage_control_topic, status)
-    
-    status = input("Enter Fan Control status (on/off): ")
-    publish_message(client, fan_control_topic, status)
-        
-    status = input("Enter Fan Speed (0-5): ")
-    publish_message(client, fan_speed_topic, status)
-
-
-    #status = input("Enter garage Control status (open/close): ")
-    #publish_message(Garage_control_topic, status)
