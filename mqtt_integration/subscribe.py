@@ -25,7 +25,7 @@ Rain_Status = "Rain_ST"
 # API endpoint to post data
 api_url = "http://127.0.0.1:8000/numericaldata/"
 
-data_payload = {
+payload = {
     'user_id': 'test_user',  # Replace with actual user ID
     'temperature': None,
     'humidity': None,
