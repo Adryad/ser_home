@@ -1,7 +1,7 @@
 # publish.py
 from paho.mqtt import client as mqtt_client
 import ssl
-
+#
 # MQTT broker credentials
 Broker = "a3aea2a70f7b43d1809561231ab50b37.s1.eu.hivemq.cloud"
 port = 8883
