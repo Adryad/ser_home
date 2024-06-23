@@ -17,7 +17,8 @@ from django.contrib import admin
 from django.urls import path
 from .views import FaceDataListCreate, NumericalDataListCreate, MQTTAction, PublishAPIView
 from django.views.generic import RedirectView
-
+from django.conf import settings
+from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     #path('facedata/', FaceDataListCreate.as_view(), name='facedata-list-create'),
@@ -32,4 +33,4 @@ urlpatterns = [
     #path('', RedirectView.as_view(url='facedata/', permanent=False)),
     path('', RedirectView.as_view(url='numericaldata/', permanent=False)),
     
-]
+]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
