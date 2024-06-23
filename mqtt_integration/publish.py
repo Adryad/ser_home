@@ -27,7 +27,7 @@ def connect_mqtt():
         else:
             print(f"Failed to connect with code {rc}")
 
-    client = mqtt_client.Client(client_id=client_id, callback_api_version=5)
+    client = mqtt_client.Client(client_id=client_id, protocol=mqtt_client.MQTTv311)
     client.username_pw_set(username, password)
     client.on_connect = on_connect
     client.tls_set(ca_certs=None, certfile=None, keyfile=None, cert_reqs=ssl.CERT_NONE, tls_version=ssl.PROTOCOL_TLSv1_2)
