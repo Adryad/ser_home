@@ -49,6 +49,7 @@ def publish_message(topic, status):
 
     client.loop_stop()
 
+if __name__ == '__main__':
     # This block is kept for manual testing, it won't be used when called via API
     client = connect_mqtt()
     client.connect(Broker, port)
