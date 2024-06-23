@@ -1,10 +1,10 @@
 # mqtt_integration/management/commands/mqtt_subscribe.py
 from django.core.management.base import BaseCommand
-import asyncio
+from mqtt_integration.subscribe import main as subscribe_main
+
 from mqtt_integration import subscribe
-
 class Command(BaseCommand):
-    help = 'Start the MQTT subscriber'
+    help = 'Subscribe to MQTT messages'
 
-    def handle(self, *args, **kwargs):
-        asyncio.run(subscribe.main())
+    def handle(self, *args, **options):
+        subscribe.main()
