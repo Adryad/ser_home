@@ -10,7 +10,6 @@ import time
 from mqtt_integration.publish import publish_message
 import logging
 
-logger = logging.getLogger(__name__)
 
 
 class NumericalDataListCreate(generics.ListCreateAPIView):
@@ -54,17 +53,23 @@ class MQTTAction(generics.CreateAPIView):
         else:
             return Response({'message': 'Invalid action'}, status=status.HTTP_400_BAD_REQUEST)
 
+logger = logging.getLogger(__name__)
+
 class PublishAPIView(APIView):
     def post(self, request, *args, **kwargs):
         logger.debug("Received data: %s", request.data)  # Debug line
 
         topic = request.data.get('topic')
         status_message = request.data.get('status')
+        
         if not topic or not status_message:
+            logger.error("Missing topic or status")
             return Response({'error': 'Topic and status are required'}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             publish_message(topic, status_message)
+            logger.info("Message published successfully")
             return Response({'message': 'Message published successfully'}, status=status.HTTP_200_OK)
         except Exception as e:
+            logger.error("Error publishing message: %s", e)
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
