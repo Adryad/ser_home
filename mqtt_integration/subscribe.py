@@ -39,10 +39,10 @@ data_payload = {
 
 # Last received values
 last_values = {
-    'temperature': None,
+    'temperature_celsius': None,
     'humidity': None,
-    'gas_level': None,
-    'rain': None
+    'Gas_level': None,
+    'Rain_ST': None
 }
 
 def connect_mqtt(on_message_callback):
@@ -80,8 +80,8 @@ def on_message(client, userdata, msg):
         elif msg.topic == "Rain_ST":
             data_payload['rain'] = bool(int(value))
 
-        if last_values[msg.topic.split('_')[0]] != value:
-            last_values[msg.topic.split('_')[0]] = value
+        if last_values[msg.topic] != value:
+            last_values[msg.topic] = value
             if all(v is not None for v in data_payload.values()):
                 response = requests.post(api_url, json=data_payload)
                 if response.status_code == 201:
