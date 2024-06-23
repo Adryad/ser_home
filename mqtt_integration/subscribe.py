@@ -6,7 +6,7 @@ import os
 import django
 import logging
 from datetime import datetime
-from asyncio import sleep, run
+import asyncio
 
 # Set up Django environment
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'yourproject.settings')
@@ -89,11 +89,12 @@ async def main():
 
     try:
         while True:
-            await sleep(15)  # Adjust the sleep time as necessary
+            await asyncio.sleep(15)  # Adjust the sleep time as necessary
     except KeyboardInterrupt:
         logger.info("Stopping MQTT client...")
     finally:
         client.loop_stop()
+        client.disconnect()
 
 if __name__ == '__main__':
-    run(main())
+    asyncio.run(main())
