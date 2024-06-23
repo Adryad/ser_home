@@ -22,7 +22,7 @@ Gas_topic = "Gas_level"
 Rain_Status = "Rain_ST"
 
 # API endpoint to post data
-api_url = "https://ser-home-2.onrender.com/numericaldata/"
+api_url = "http://127.0.0.1:8000/numericaldata/"
 
 data_payload = {
     'user_id': 'test_user',  # Replace with actual user ID
