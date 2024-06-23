@@ -1,7 +1,6 @@
 # publish.py
 from paho.mqtt import client as mqtt_client
 import ssl
-import time
 
 # MQTT broker credentials
 Broker = "a3aea2a70f7b43d1809561231ab50b37.s1.eu.hivemq.cloud"
@@ -38,45 +37,48 @@ def connect_mqtt():
 
 def publish_message(topic, status):
     client = connect_mqtt()
-    try:
-        client.connect(Broker, port)
-        client.loop_start()  # Start the message loop in the background
-        time.sleep(1)  # Wait for the connection to establish
+    client.connect(Broker, port)
+    client.loop_start()  # Start the message loop in the background
 
-        result = client.publish(topic, status)
-        msg_status = result.rc
-        if msg_status == 0:
-            print(f"Message: {status} sent to topic {topic}")
-        else:
-            print(f"Failed to send message to topic {topic}")
-    except Exception as e:
-        print(f"Error: {e}")
-    finally:
-        client.loop_stop()
-        client.disconnect()
+    result = client.publish(topic, status)
+    msg_status = result.rc
+    if msg_status == 0:
+        print(f"Message: {status} sent to topic {topic}")
+    else:
+        print(f"Failed to send message to topic {topic}")
+
+    client.loop_stop()
 
 if __name__ == '__main__':
     # This block is kept for manual testing, it won't be used when called via API
+    client = connect_mqtt()
+    client.connect(Broker, port)
+    client.loop_start()  # Start the message loop in the background
+
     status = input("Enter Main Room Light status (on/off): ")
-    publish_message(Main_Room_Light_topic, status)
+    publish_message(client, Main_Room_Light_topic, status)
 
     status = input("Enter Personal Room status (on/off): ")
-    publish_message(Personal_Room_topic, status)
+    publish_message(client, Personal_Room_topic, status)
 
     status = input("Enter Garage status (on/off): ")
-    publish_message(Garage_topic, status)
+    publish_message(client, Garage_topic, status)
 
     status = input("Enter Outside status (on/off): ")
-    publish_message(Outside_topic, status)
+    publish_message(client, Outside_topic, status)
 
     status = input("Enter Window Control status (open/close): ")
-    publish_message(window_control_topic, status)
+    publish_message(client, window_control_topic, status)
 
-    status = input("Enter Garage Control status (open/close): ")
-    publish_message(Garage_control_topic, status)
+    status = input("Enter garage Control status (open/close): ")
+    publish_message(client, Garage_control_topic, status)
     
     status = input("Enter Fan Control status (on/off): ")
-    publish_message(fan_control_topic, status)
+    publish_message(client, fan_control_topic, status)
         
     status = input("Enter Fan Speed (0-5): ")
-    publish_message(fan_speed_topic, status)
+    publish_message(client, fan_speed_topic, status)
+
+
+    #status = input("Enter garage Control status (open/close): ")
+    #publish_message(Garage_control_topic, status)

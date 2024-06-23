@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-h*60mz0uu$l%w=k(pt0g%dlcwb00v@lgfckjgf0!g1t-%04!=s
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['yourdomain.com', 'www.yourdomain.com', 'ser-home-2.onrender.com', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['yourdomain.com', 'www.yourdomain.com', 'ser-home-2.onrender.com', '127.0.0.1']
 
 
 # Application definition
@@ -33,7 +33,6 @@ ALLOWED_HOSTS = ['yourdomain.com', 'www.yourdomain.com', 'ser-home-2.onrender.co
 INSTALLED_APPS = [
     'mqtt_integration.apps.MqttIntegrationConfig',
     'rest_framework',
-    'rest_framework.authtoken',
     #'mqtt_integration',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -118,11 +117,9 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
-import os
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-if DEBUG:
-    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+STATIC_URL = 'static/'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
