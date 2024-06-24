@@ -50,7 +50,7 @@ def publish_message(topic, status):
         print(f"Failed to send message to topic {topic}")
 
     client.loop_stop()
-    client.disconnect()
+    #client.disconnect()
 
 if __name__ == '__main__':
     # This block is kept for manual testing, it won't be used when called via API
