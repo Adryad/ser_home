@@ -57,8 +57,11 @@ class MQTTAction(generics.CreateAPIView):
         else:
             return Response({'message': 'Invalid action'}, status=status.HTTP_400_BAD_REQUEST)
 
+
 class PublishAPIView(APIView):
     def post(self, request, *args, **kwargs):
+        logger.debug("Received data: %s", request.data)  # Debug line
+
         topic = request.data.get('topic')
         status_message = request.data.get('status')
         if not topic or not status_message:
@@ -67,6 +70,7 @@ class PublishAPIView(APIView):
         try:
             publish_message(topic, status_message)
             return Response({'message': 'Message published successfully'}, status=status.HTTP_200_OK)
+        except ValueError as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            logger.error(f"Error publishing message: {e}")
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
