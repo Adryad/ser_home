@@ -20,20 +20,27 @@ Door_control_topic = "Door_control"  # open/close
 fan_control_topic = "fan_control"  # on/off
 fan_speed_topic = "fan_speed"  # 0 - 5
 
-def connect_mqtt(on_message_callback):
+def connect_mqtt():
     def on_connect(client, userdata, flags, rc):
         if rc == 0:
             print("Connected to the Broker")
         else:
             print(f"Failed to connect with code {rc}")
-
     client = mqtt_client.Client(client_id=client_id, protocol=mqtt_client.MQTTv311)
+   # client = mqtt_client.Client(client_id)
     client.username_pw_set(username, password)
     client.on_connect = on_connect
-    client.tls_set(ca_certs=None, certfile=None, keyfile=None, cert_reqs=ssl.CERT_NONE, tls_version=ssl.PROTOCOL_TLSv1_2)
-    client.tls_insecure_set(True)
+    client.tls_set(ca_certs=None, certfile=None, keyfile=None, cert_reqs=ssl.CERT_REQUIRED, tls_version=ssl.PROTOCOL_TLSv1_2)
 
     return client
+
+def publish(client, topic, status, qos):
+    msg = status
+    result = client.publish(topic, msg, qos=qos)
+    if result.rc == mqtt_client.MQTT_ERR_SUCCESS:
+        print(f"Message: {msg} sent to topic {topic} with QoS {qos}")
+    else:
+        print(f"Failed to send message to topic {topic}")
 
 def publish_message(topic, status):
     client = connect_mqtt()
