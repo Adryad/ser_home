@@ -20,7 +20,7 @@ Door_control_topic = "Door_control"  # open/close
 fan_control_topic = "fan_control"  # on/off
 fan_speed_topic = "fan_speed"  # 0 - 5
 
-def connect_mqtt():
+def connect_mqtt(on_message_callback):
     def on_connect(client, userdata, flags, rc):
         if rc == 0:
             print("Connected to the Broker")
@@ -68,7 +68,7 @@ if __name__ == '__main__':
     publish_message(client, Outside_topic, status)
 
     status = input("Enter Window Control status (open/close): ")
-    publish_message(client, window_control_topic, status)
+    publish_message(client, window_control_topic, status, 2)
 
     status = input("Enter garage Control status (open/close): ")
     publish_message(client, Garage_control_topic, status)
