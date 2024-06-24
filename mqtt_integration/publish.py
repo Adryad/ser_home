@@ -20,6 +20,11 @@ Garage_control_topic = "Garage_control"  # open/close
 Door_control_topic = "Door_control"  # open/close
 fan_control_topic = "fan_control"  # on/off
 fan_speed_topic = "fan_speed"  # 0 - 5
+valid_topics = [
+    "Main_Room", "Personal_Room", "Garage", "Outside", 
+    "window_control", "Garage_control", "Door_control",
+    "fan_control", "fan_speed"
+]
 
 def connect_mqtt():
     def on_connect(client, userdata, flags, rc):
@@ -35,7 +40,17 @@ def connect_mqtt():
     client.tls_insecure_set(True)
 
     return client
-
+def publish(client, topic, status):
+    if topic not in valid_topics:
+        raise ValueError(f"Invalid topic: {topic}")
+    msg = status
+    result = client.publish(topic, msg)
+    msg_status = result.rc
+    if msg_status == 0:
+        print(f"Message: {msg} sent to topic {topic}")
+    else:
+        print(f"Failed to send message to topic {topic}")
+            
 def publish_message(topic, status):
     client = connect_mqtt()
     try:

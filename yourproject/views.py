@@ -61,8 +61,8 @@ class PublishAPIView(APIView):
     def post(self, request, *args, **kwargs):
         topic = request.data.get('topic')
         status_message = request.data.get('status')
-       # if not topic or not status_message:
-          #  return Response({'error': 'Topic and status are required'}, status=status.HTTP_400_BAD_REQUEST)
+        if not topic or not status_message:
+            return Response({'error': 'Topic and status are required'}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             publish_message(topic, status_message)
